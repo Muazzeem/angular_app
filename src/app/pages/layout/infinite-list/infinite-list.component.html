@@ -1,0 +1,41 @@
+<div class="infinite-cards row">
+  <div class="col-md-12 col-lg-12">
+    <nb-card class="own-scroll" accent="info">
+      <nb-card-header>
+        <mat-form-field class="example-chip-list">
+          <p>Search by stacks like (Python, TypeScript, Django, Angular)</p>
+          <mat-chip-list #chipList aria-label="stacks selection">
+            <mat-chip
+              *ngFor="let fruit of stacks"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(fruit)">
+              {{fruit}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              #fruitInput
+              [formControl]="stacksCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let stack of filteredStacks | async" [value]="stack">
+              {{stack}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </nb-card-header>
+      <nb-list
+        nbInfiniteList
+        [threshold]="500"
+        (bottomThreshold)="loadNext(firstCard)">
+        <nb-list-item *ngFor="let newsPost of firstCard.news">
+          <ngx-news-post [post]="newsPost"></ngx-news-post>
+        </nb-list-item>
+      </nb-list>
+    </nb-card>
+  </div>
+</div>
